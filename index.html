@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>令和8年度 診療報酬改定 対応確認</title>
+<style>
+  :root {
+    --blue: #185FA5;
+    --blue-light: #E6F1FB;
+    --blue-mid: #B5D4F4;
+    --teal: #0F6E56;
+    --teal-light: #E1F5EE;
+    --gray-bg: #F7F6F3;
+    --gray-border: #E2E0D8;
+    --gray-text: #6B6A65;
+    --text: #1A1A18;
+    --white: #FFFFFF;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+    background: var(--gray-bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 3rem;
+  }
+  .top-bar {
+    background: var(--blue);
+    padding: 1rem 1.25rem 0.875rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .top-bar h1 { font-size: 15px; font-weight: 600; color: #fff; letter-spacing: 0.02em; line-height: 1.4; }
+  .top-bar p { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+  .controls {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-border);
+    padding: 0.75rem 1rem;
+    position: sticky;
+    top: 60px;
+    z-index: 99;
+  }
+  .search-wrap { position: relative; margin-bottom: 0.625rem; }
+  .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--gray-text); pointer-events: none; }
+  .search-wrap input {
+    width: 100%; font-size: 14px; padding: 8px 12px 8px 34px;
+    border: 1px solid var(--gray-border); border-radius: var(--radius-sm);
+    background: var(--gray-bg); color: var(--text); font-family: inherit; outline: none;
+  }
+  .search-wrap input:focus { border-color: var(--blue); background: var(--white); }
+  .filter-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-btn {
+    font-size: 12px; font-family: inherit; padding: 5px 12px;
+    border-radius: 999px; border: 1px solid var(--gray-border);
+    background: var(--white); color: var(--gray-text); cursor: pointer;
+    transition: all 0.15s; white-space: nowrap;
+  }
+  .filter-btn:hover { background: var(--gray-bg); color: var(--text); }
+  .filter-btn.active { background: var(--blue); border-color: var(--blue); color: var(--white); font-weight: 600; }
+  .list-wrap { padding: 0.75rem 0.875rem; max-width: 680px; margin: 0 auto; }
+  .count-label { font-size: 11px; color: var(--gray-text); margin-bottom: 0.625rem; padding-left: 2px; }
+  .item {
+    background: var(--white); border: 1px solid var(--gray-border);
+    border-radius: var(--radius); margin-bottom: 8px; overflow: hidden;
+    transition: box-shadow 0.15s;
+  }
+  .item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+  .item-header {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 13px 14px; cursor: pointer;
+    -webkit-tap-highlight-color: transparent; user-select: none;
+  }
+  .item-code {
+    font-size: 10px; font-weight: 600; color: var(--blue);
+    background: var(--blue-light); border: 1px solid var(--blue-mid);
+    border-radius: 4px; padding: 2px 6px; white-space: nowrap;
+    flex-shrink: 0; margin-top: 2px; letter-spacing: 0.02em;
+  }
+  .item-title-wrap { flex: 1; min-width: 0; }
+  .item-name { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.45; }
+  .item-summary {
+    font-size: 11px; color: var(--gray-text); margin-top: 3px;
+    line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .chevron { flex-shrink: 0; margin-top: 3px; color: var(--gray-text); transition: transform 0.22s ease; }
+  .chevron.open { transform: rotate(180deg); }
+  .item-body { display: none; border-top: 1px solid var(--gray-border); padding: 14px; }
+  .item-body.open { display: block; }
+  .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    color: var(--gray-text); text-transform: uppercase;
+    margin-bottom: 5px; margin-top: 12px;
+  }
+  .section-label:first-child { margin-top: 0; }
+  .section-content { font-size: 13px; line-height: 1.75; color: var(--text); white-space: pre-line; }
+  .taiou-box {
+    background: var(--teal-light); border-left: 3px solid var(--teal);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 10px 12px; font-size: 13px; line-height: 1.75;
+    color: #0a4a39; white-space: pre-line;
+  }
+  .taiou-gaito {
+    background: #F1EFE8; border-left: 3px solid #B4B2A9;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 10px 12px; font-size: 13px; line-height: 1.75; color: #5F5E5A;
+  }
+  .taiou-empty { font-size: 12px; color: var(--gray-text); font-style: italic; padding: 8px 0; }
+  .ref-link {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; color: var(--blue); text-decoration: none;
+    margin-top: 12px; padding: 6px 12px;
+    border: 1px solid var(--blue-mid); border-radius: var(--radius-sm);
+    background: var(--blue-light); transition: all 0.15s;
+  }
+  .ref-link:hover { background: var(--blue-mid); }
+  .empty { text-align: center; padding: 3rem 1rem; color: var(--gray-text); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <h1>令和8年度 診療報酬改定 対応確認</h1>
+  <p>2026年度改定 ／ 理学療法士協会資料準拠</p>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="searchInput" placeholder="キーワードで検索…" oninput="render()">
+  </div>
+  <div class="filter-row" id="filterBar"></div>
+</div>
+
+<div class="list-wrap">
+  <div class="count-label" id="countLabel"></div>
+  <div id="list"></div>
+</div>
+
+<script>
+const PDF_URLS = {
+  "答申":  "https://www.japanpt.or.jp/pt/function/asset/pdf/20260213_r8_houshukaitei_toushin_c.pdf",
+  "疑義1": "https://www.japanpt.or.jp/pt/function/asset/pdf/20260323_gigi01.pdf",
+  "疑義2": "https://www.japanpt.or.jp/pt/function/asset/pdf/20260401_gigi02.pdf",
+  "疑義3": "https://www.japanpt.or.jp/pt/function/asset/pdf/20260422_gigi03.pdf",
+  "疑義4": "https://www.japanpt.or.jp/pt/function/asset/pdf/20260422_gigi04.pdf",
+  "疑義5": "https://www.japanpt.or.jp/pt/function/asset/pdf/20260508_gigi05.pdf",
+  "疑義6": "https://www.japanpt.or.jp/pt/function/asset/pdf/20260521_gigi06.pdf"
+};
+
+// カテゴリ順序（固定）
+const CATEGORY_ORDER = [
+  "すべて",
+  "賃上げ・処遇改善",
+  "リハビリ算定",
+  "リハビリ業務",
+  "入院料",
+  "多職種連携",
+  "摂食嚥下",
+  "在宅・退院支援",
+  "リハ栄養",
+  "身体拘束",
+  "加算"
+];
+
+// 「加算」カテゴリ自動判定：項目名または内容に「加算」を含むもの
+function getCategories(d) {
+  const cats = [d.category];
+  if (d.category !== "加算" && (d.name.includes("加算") || d.naiyou.includes("加算"))) {
+    cats.push("加算");
+  }
+  return cats;
+}
+
+const RAW_DATA = [
+  { id:1,  code:"Ⅰ-2-1-①",  category:"賃上げ・処遇改善", name:"賃上げに向けた評価の見直し",         naiyou:"医療機関に勤務する理学療法士等の賃金改善の評価（各ベースアップ評価料）の見直し",                                                                                              taiou:"",         shurui:"答申", page:18  },
+  { id:2,  code:"Ⅰ-2-3-①",  category:"多職種連携",        name:"多職種協働体制の評価新設",            naiyou:"看護・多職種協働加算（加算1：277点、加算2：255点）\n各医療職種が専門性に基づき業務を行う体制整備",                                                                            taiou:"",         shurui:"答申", page:65  },
+  { id:3,  code:"Ⅰ-2-5-④",  category:"摂食嚥下",          name:"摂食嚥下機能回復の推進",              naiyou:"摂食嚥下機能回復体制加算の専従要件緩和\n対象患者要件拡大",                                                                                                                  taiou:"",         shurui:"答申", page:92  },
+  { id:4,  code:"Ⅰ-2-5-⑤",  category:"リハビリ業務",      name:"療法士の専門性を生かした指導推進",    naiyou:"間接業務20分＝1単位化\n専従療法士の業務追加・兼任見直し\n病棟外での退院支援業務を明確化\n管理料併設時の兼任可能化",                                                          taiou:"",         shurui:"答申", page:95  },
+  { id:5,  code:"Ⅱ-1-1-⑨",  category:"入院料",            name:"地域包括医療病棟の見直し",            naiyou:"入院料の見直し\nリハ・栄養・口腔連携加算の見直し\n平均在院日数・ADL低下割合等の基準見直し",                                                                                taiou:"",         shurui:"答申", page:173 },
+  { id:6,  code:"Ⅱ-1-1-⑩",  category:"入院料",            name:"回復期リハ病棟入院料等の見直し",      naiyou:"強化体制加算新設（80点/日）\n重症基準見直し・対象追加\n土日祝含む全日リハ提供体制\n退院前訪問指導料の出来高化\nFIM研修要件見直し",                                          taiou:"",         shurui:"答申", page:177 },
+  { id:7,  code:"Ⅱ-1-1-⑪",  category:"入院料",            name:"療養病棟入院基本料の見直し",          naiyou:"超重症児（者）・準超重症児（者）を医療区分3・2に追加",                                                                                                                      taiou:"該当なし", shurui:"答申", page:187 },
+  { id:8,  code:"Ⅱ-1-1-⑫",  category:"入院料",            name:"障害者施設等入院基本料の見直し",      naiyou:"廃用症候群患者を療養病棟に準じた評価へ（重度肢体不自由者を除く）",                                                                                                          taiou:"該当なし", shurui:"答申", page:194 },
+  { id:9,  code:"Ⅱ-2-1-①",  category:"在宅・退院支援",    name:"協力医療機関のカンファレンス見直し",  naiyou:"協力対象施設との情報共有・カンファレンス頻度の見直し",                                                                                                                      taiou:"",         shurui:"答申", page:246 },
+  { id:10, code:"Ⅱ-2-1-②",  category:"在宅・退院支援",    name:"包括期入院医療の後方支援評価",        naiyou:"包括期充実体制加算新設（80点/日）",                                                                                                                                         taiou:"該当なし", shurui:"答申", page:250 },
+  { id:11, code:"Ⅱ-2-2-①",  category:"在宅・退院支援",    name:"入退院支援加算の見直し",              naiyou:"地域包括医療病棟・回復期リハ病棟・地域包括ケア病棟で算定新設\n検査・画像情報提供加算新設",                                                                                taiou:"",         shurui:"答申", page:255 },
+  { id:12, code:"Ⅱ-2-2-③",  category:"在宅・退院支援",    name:"高次脳機能障害者の退院支援",          naiyou:"退院時に必要に応じ情報提供を要件化",                                                                                                                                        taiou:"",         shurui:"答申", page:264 },
+  { id:13, code:"Ⅱ-2-3-①",  category:"リハ栄養",          name:"リハ・栄養・口腔の一体的取組推進",    naiyou:"連携体制加算の見直し\n加算2新設（150点・90点）\n地域包括ケア病棟でも算定可能",                                                                                            taiou:"",         shurui:"答申", page:268 },
+  { id:14, code:"Ⅲ-1-①",    category:"在宅・退院支援",    name:"療養・就労両立支援指導料の見直し",    naiyou:"対象疾患の定め廃止\n算定期間を3か月→6か月へ延長",                                                                                                                          taiou:"",         shurui:"答申", page:432 },
+  { id:15, code:"Ⅲ-1-⑭",    category:"入院料",            name:"慢性心不全再入院予防の評価新設",      naiyou:"心不全再入院予防継続管理料新設（1000〜225点）",                                                                                                                             taiou:"該当なし", shurui:"答申", page:468 },
+  { id:16, code:"Ⅲ-1-1-①",  category:"身体拘束",          name:"身体的拘束最小化の推進",              naiyou:"体制基準・研修内容の詳細追加\n除外基準の追加",                                                                                                                              taiou:"",         shurui:"答申", page:479 },
+  { id:17, code:"Ⅲ-2-①",    category:"リハビリ業務",      name:"リハ実績指数の見直し",                naiyou:"FIM歩行・トイレ動作の改善評価追加\n除外要件見直し（80歳以上削除、FIM基準変更、除外割合30%→20%）",                                                                          taiou:"",         shurui:"答申", page:489 },
+  { id:18, code:"Ⅲ-4-①",    category:"リハビリ算定",      name:"退院時リハ指導料の見直し",            naiyou:"対象患者を疾患別リハ算定患者に限定",                                                                                                                                        taiou:"",         shurui:"答申", page:550 },
+  { id:19, code:"Ⅲ-4-②",    category:"リハビリ算定",      name:"医療機関外リハの上限見直し",          naiyou:"医療機関外リハの算定上限を「一連の入院で3単位（特例6単位）」に変更",                                                                                                        taiou:"",         shurui:"答申", page:552 },
+  { id:20, code:"Ⅲ-4-③",    category:"リハビリ算定",      name:"疾患別リハ上限緩和対象の見直し",      naiyou:"運動器リハ算定者を対象から削除\n上限緩和基準に手術日・急性増悪日を追加",                                                                                                  taiou:"",         shurui:"答申", page:554 },
+  { id:21, code:"Ⅲ-4-④",    category:"リハビリ算定",      name:"訓練内容に応じた評価見直し",          naiyou:"離床を伴わない個別療法20分以上は減算（90%）\n1日2単位まで",                                                                                                               taiou:"",         shurui:"答申", page:555 },
+  { id:22, code:"Ⅲ-4-⑤",    category:"リハビリ算定",      name:"リハ総合実施計画評価料の見直し",      naiyou:"目標設定等支援・管理料（シート）廃止\n評価見直し",                                                                                                                          taiou:"",         shurui:"答申", page:558 },
+  { id:23, code:"Ⅲ-4-⑥",    category:"リハビリ算定",      name:"リンパ浮腫複合的治療料の見直し",      naiyou:"実施時間ごとの評価に見直し",                                                                                                                                               taiou:"該当なし", shurui:"答申", page:560 },
+  { id:24, code:"Ⅲ-4-1-①",  category:"リハビリ算定",      name:"早期・休日リハの推進",                naiyou:"早期リハ加算：入院3日以内60点、4日目以降25点\n休日リハ加算新設（30日目まで25点）",                                                                                        taiou:"",         shurui:"答申", page:561 },
+  { id:25, code:"Ⅲ-5-2-⑤",  category:"入院料",            name:"産科管理加算の新設",                  naiyou:"産後ケア等と連携した体制評価（病院250点、有床診50点）",                                                                                                                    taiou:"該当なし", shurui:"答申", page:596 },
+];
+
+// 各項目に表示カテゴリリストを付与
+const DATA = RAW_DATA.map(d => ({ ...d, categories: getCategories(d) }));
+
+let activeCategory = "すべて";
+let openIds = new Set();
+
+function buildUrl(shurui, page) {
+  if (!shurui || !page) return null;
+  const base = PDF_URLS[shurui] || PDF_URLS["答申"];
+  return base + "#page=" + page;
+}
+
+function getShuruiLabel(shurui) {
+  if (!shurui) return "";
+  if (shurui === "答申") return "答申";
+  return "疑義解釈その" + shurui.replace("疑義","");
+}
+
+function render() {
+  const kw = document.getElementById("searchInput").value.trim();
+  const filtered = DATA.filter(d => {
+    const catMatch = activeCategory === "すべて" || d.categories.includes(activeCategory);
+    const kwMatch = !kw || d.name.includes(kw) || d.naiyou.includes(kw) || d.taiou.includes(kw) || d.code.includes(kw) || d.category.includes(kw);
+    return catMatch && kwMatch;
+  });
+
+  document.getElementById("countLabel").textContent = filtered.length + " 件表示中";
+
+  const list = document.getElementById("list");
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty">該当する項目がありません</div>';
+    return;
+  }
+
+  const svgChevron = `<svg class="chevron OPEN_CLASS" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`;
+  const svgLink = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
+
+  list.innerHTML = filtered.map(d => {
+    const isOpen = openIds.has(d.id);
+    const url = buildUrl(d.shurui, d.page);
+    const shuruiLabel = getShuruiLabel(d.shurui);
+    const chevron = svgChevron.replace("OPEN_CLASS", isOpen ? "open" : "");
+    const summaryText = d.naiyou.replace(/\n/g, "／").slice(0, 42) + (d.naiyou.length > 42 ? "…" : "");
+
+    let taiouHtml;
+    if (d.taiou === "該当なし") {
+      taiouHtml = `<div class="taiou-gaito">当院には該当しない項目です</div>`;
+    } else if (d.taiou) {
+      taiouHtml = `<div class="taiou-box">${d.taiou}</div>`;
+    } else {
+      taiouHtml = `<div class="taiou-empty">対応内容を確認中です</div>`;
+    }
+
+    const refHtml = url
+      ? `<a class="ref-link" href="${url}" target="_blank">${svgLink}${shuruiLabel} ${d.page}ページを開く</a>`
+      : "";
+
+    return `<div class="item">
+      <div class="item-header" onclick="toggle(${d.id})">
+        <span class="item-code">${d.code}</span>
+        <div class="item-title-wrap">
+          <div class="item-name">${d.name}</div>
+          ${!isOpen ? `<div class="item-summary">${summaryText}</div>` : ""}
+        </div>
+        ${chevron}
+      </div>
+      <div class="item-body ${isOpen ? 'open' : ''}">
+        <div class="section-label">改定内容</div>
+        <div class="section-content">${d.naiyou}</div>
+        <div class="section-label" style="margin-top:14px">当院の対応</div>
+        ${taiouHtml}
+        ${refHtml}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function toggle(id) {
+  if (openIds.has(id)) openIds.delete(id); else openIds.add(id);
+  render();
+}
+
+function setCategory(c) {
+  activeCategory = c;
+  document.querySelectorAll(".filter-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.cat === c);
+  });
+  render();
+}
+
+function initFilters() {
+  const bar = document.getElementById("filterBar");
+  bar.innerHTML = CATEGORY_ORDER.map(c =>
+    `<button class="filter-btn ${c === activeCategory ? 'active' : ''}" data-cat="${c}" onclick="setCategory('${c}')">${c}</button>`
+  ).join("");
+}
+
+initFilters();
+render();
+</script>
+</body>
+</html>
