@@ -22,27 +22,18 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-    background: var(--gray-bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding-bottom: 3rem;
+    background: var(--gray-bg); color: var(--text);
+    min-height: 100vh; padding-bottom: 3rem;
   }
   .top-bar {
-    background: var(--blue);
-    padding: 1rem 1.25rem 0.875rem;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    background: var(--blue); padding: 1rem 1.25rem 0.875rem;
+    position: sticky; top: 0; z-index: 100;
   }
   .top-bar h1 { font-size: 15px; font-weight: 600; color: #fff; letter-spacing: 0.02em; line-height: 1.4; }
   .top-bar p { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; }
   .controls {
-    background: var(--white);
-    border-bottom: 1px solid var(--gray-border);
-    padding: 0.75rem 1rem;
-    position: sticky;
-    top: 60px;
-    z-index: 99;
+    background: var(--white); border-bottom: 1px solid var(--gray-border);
+    padding: 0.75rem 1rem; position: sticky; top: 60px; z-index: 99;
   }
   .search-wrap { position: relative; margin-bottom: 0.625rem; }
   .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--gray-text); pointer-events: none; }
@@ -65,10 +56,11 @@
   .count-label { font-size: 11px; color: var(--gray-text); margin-bottom: 0.625rem; padding-left: 2px; }
   .item {
     background: var(--white); border: 1px solid var(--gray-border);
-    border-radius: var(--radius); margin-bottom: 8px; overflow: hidden;
-    transition: box-shadow 0.15s;
+    border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; transition: box-shadow 0.15s;
   }
   .item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+  .item.gaito-nashi { background: #F4F3F0; border-color: #D6D4CC; opacity: 0.82; }
+  .item.gaito-nashi:hover { box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
   .item-header {
     display: flex; align-items: flex-start; gap: 10px;
     padding: 13px 14px; cursor: pointer;
@@ -80,33 +72,33 @@
     border-radius: 4px; padding: 2px 6px; white-space: nowrap;
     flex-shrink: 0; margin-top: 2px; letter-spacing: 0.02em;
   }
+  .gaito-nashi .item-code { color: #7A7872; background: #ECEAE4; border-color: #C8C6BE; }
+  .gaito-nashi .item-name { color: #5A5956; }
+  .gaito-nashi .item-summary { color: #9A9890; }
+  .gaito-nashi .chevron { color: #B0AEA8; }
   .item-title-wrap { flex: 1; min-width: 0; }
   .item-name { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.45; }
-  .item-summary {
-    font-size: 11px; color: var(--gray-text); margin-top: 3px;
-    line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
+  .item-summary { font-size: 11px; color: var(--gray-text); margin-top: 3px; line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .chevron { flex-shrink: 0; margin-top: 3px; color: var(--gray-text); transition: transform 0.22s ease; }
   .chevron.open { transform: rotate(180deg); }
   .item-body { display: none; border-top: 1px solid var(--gray-border); padding: 14px; }
+  .gaito-nashi .item-body { border-top-color: #D6D4CC; }
   .item-body.open { display: block; }
   .section-label {
     font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
-    color: var(--gray-text); text-transform: uppercase;
-    margin-bottom: 5px; margin-top: 12px;
+    color: var(--gray-text); margin-bottom: 5px; margin-top: 12px;
   }
   .section-label:first-child { margin-top: 0; }
   .section-content { font-size: 13px; line-height: 1.75; color: var(--text); white-space: pre-line; }
   .taiou-box {
     background: var(--teal-light); border-left: 3px solid var(--teal);
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    padding: 10px 12px; font-size: 13px; line-height: 1.75;
-    color: #0a4a39; white-space: pre-line;
+    padding: 10px 12px; font-size: 13px; line-height: 1.75; color: #0a4a39; white-space: pre-line;
   }
   .taiou-gaito {
-    background: #F1EFE8; border-left: 3px solid #B4B2A9;
+    background: #ECEAE4; border-left: 3px solid #B0AEA8;
     border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    padding: 10px 12px; font-size: 13px; line-height: 1.75; color: #5F5E5A;
+    padding: 10px 12px; font-size: 13px; line-height: 1.75; color: #6B6A65; white-space: pre-line;
   }
   .taiou-empty { font-size: 12px; color: var(--gray-text); font-style: italic; padding: 8px 0; }
   .ref-link {
@@ -151,72 +143,281 @@ const PDF_URLS = {
   "疑義6": "https://www.japanpt.or.jp/pt/function/asset/pdf/20260521_gigi06.pdf"
 };
 
-// カテゴリ順序（固定）
 const CATEGORY_ORDER = [
-  "すべて",
-  "賃上げ・処遇改善",
-  "リハビリ算定",
-  "リハビリ業務",
-  "入院料",
-  "多職種連携",
-  "摂食嚥下",
-  "在宅・退院支援",
-  "リハ栄養",
-  "身体拘束",
-  "加算"
+  "すべて","賃上げ・処遇改善","リハビリ算定","リハビリ業務",
+  "入院料","多職種連携","摂食嚥下","在宅・退院支援","リハ栄養","疑義解釈","加算"
 ];
 
-// 「加算」カテゴリ自動判定：項目名または内容に「加算」を含むもの
+// 改定項目コードからPDF種別を判定
+function getShuruiFromCode(code) {
+  if (!code) return "答申";
+  if (/疑義1|疑義（その1）|疑義\(その1\)/.test(code)) return "疑義1";
+  if (/疑義2|疑義（その2）|疑義\(その2\)/.test(code)) return "疑義2";
+  if (/疑義3|疑義（その3）|疑義\(その3\)/.test(code)) return "疑義3";
+  if (/疑義4|疑義（その4）|疑義\(その4\)/.test(code)) return "疑義4";
+  if (/疑義5|疑義（その5）|疑義\(その5\)/.test(code)) return "疑義5";
+  if (/疑義6|疑義（その6）|疑義\(その6\)/.test(code)) return "疑義6";
+  return "答申";
+}
+
+function getShuruiLabel(shurui) {
+  if (shurui === "答申") return "答申";
+  return "疑義解釈その" + shurui.replace("疑義","");
+}
+
 function getCategories(d) {
   const cats = [d.category];
   if (d.category !== "加算" && (d.name.includes("加算") || d.naiyou.includes("加算"))) {
-    cats.push("加算");
+    if (!cats.includes("加算")) cats.push("加算");
   }
   return cats;
 }
 
+function isGaitoNashi(taiou) {
+  return taiou && taiou.includes("該当なし");
+}
+
 const RAW_DATA = [
-  { id:1,  code:"Ⅰ-2-1-①",  category:"賃上げ・処遇改善", name:"賃上げに向けた評価の見直し",         naiyou:"医療機関に勤務する理学療法士等の賃金改善の評価（各ベースアップ評価料）の見直し",                                                                                              taiou:"",         shurui:"答申", page:18  },
-  { id:2,  code:"Ⅰ-2-3-①",  category:"多職種連携",        name:"多職種協働体制の評価新設",            naiyou:"看護・多職種協働加算（加算1：277点、加算2：255点）\n各医療職種が専門性に基づき業務を行う体制整備",                                                                            taiou:"",         shurui:"答申", page:65  },
-  { id:3,  code:"Ⅰ-2-5-④",  category:"摂食嚥下",          name:"摂食嚥下機能回復の推進",              naiyou:"摂食嚥下機能回復体制加算の専従要件緩和\n対象患者要件拡大",                                                                                                                  taiou:"",         shurui:"答申", page:92  },
-  { id:4,  code:"Ⅰ-2-5-⑤",  category:"リハビリ業務",      name:"療法士の専門性を生かした指導推進",    naiyou:"間接業務20分＝1単位化\n専従療法士の業務追加・兼任見直し\n病棟外での退院支援業務を明確化\n管理料併設時の兼任可能化",                                                          taiou:"",         shurui:"答申", page:95  },
-  { id:5,  code:"Ⅱ-1-1-⑨",  category:"入院料",            name:"地域包括医療病棟の見直し",            naiyou:"入院料の見直し\nリハ・栄養・口腔連携加算の見直し\n平均在院日数・ADL低下割合等の基準見直し",                                                                                taiou:"",         shurui:"答申", page:173 },
-  { id:6,  code:"Ⅱ-1-1-⑩",  category:"入院料",            name:"回復期リハ病棟入院料等の見直し",      naiyou:"強化体制加算新設（80点/日）\n重症基準見直し・対象追加\n土日祝含む全日リハ提供体制\n退院前訪問指導料の出来高化\nFIM研修要件見直し",                                          taiou:"",         shurui:"答申", page:177 },
-  { id:7,  code:"Ⅱ-1-1-⑪",  category:"入院料",            name:"療養病棟入院基本料の見直し",          naiyou:"超重症児（者）・準超重症児（者）を医療区分3・2に追加",                                                                                                                      taiou:"該当なし", shurui:"答申", page:187 },
-  { id:8,  code:"Ⅱ-1-1-⑫",  category:"入院料",            name:"障害者施設等入院基本料の見直し",      naiyou:"廃用症候群患者を療養病棟に準じた評価へ（重度肢体不自由者を除く）",                                                                                                          taiou:"該当なし", shurui:"答申", page:194 },
-  { id:9,  code:"Ⅱ-2-1-①",  category:"在宅・退院支援",    name:"協力医療機関のカンファレンス見直し",  naiyou:"協力対象施設との情報共有・カンファレンス頻度の見直し",                                                                                                                      taiou:"",         shurui:"答申", page:246 },
-  { id:10, code:"Ⅱ-2-1-②",  category:"在宅・退院支援",    name:"包括期入院医療の後方支援評価",        naiyou:"包括期充実体制加算新設（80点/日）",                                                                                                                                         taiou:"該当なし", shurui:"答申", page:250 },
-  { id:11, code:"Ⅱ-2-2-①",  category:"在宅・退院支援",    name:"入退院支援加算の見直し",              naiyou:"地域包括医療病棟・回復期リハ病棟・地域包括ケア病棟で算定新設\n検査・画像情報提供加算新設",                                                                                taiou:"",         shurui:"答申", page:255 },
-  { id:12, code:"Ⅱ-2-2-③",  category:"在宅・退院支援",    name:"高次脳機能障害者の退院支援",          naiyou:"退院時に必要に応じ情報提供を要件化",                                                                                                                                        taiou:"",         shurui:"答申", page:264 },
-  { id:13, code:"Ⅱ-2-3-①",  category:"リハ栄養",          name:"リハ・栄養・口腔の一体的取組推進",    naiyou:"連携体制加算の見直し\n加算2新設（150点・90点）\n地域包括ケア病棟でも算定可能",                                                                                            taiou:"",         shurui:"答申", page:268 },
-  { id:14, code:"Ⅲ-1-①",    category:"在宅・退院支援",    name:"療養・就労両立支援指導料の見直し",    naiyou:"対象疾患の定め廃止\n算定期間を3か月→6か月へ延長",                                                                                                                          taiou:"",         shurui:"答申", page:432 },
-  { id:15, code:"Ⅲ-1-⑭",    category:"入院料",            name:"慢性心不全再入院予防の評価新設",      naiyou:"心不全再入院予防継続管理料新設（1000〜225点）",                                                                                                                             taiou:"該当なし", shurui:"答申", page:468 },
-  { id:16, code:"Ⅲ-1-1-①",  category:"身体拘束",          name:"身体的拘束最小化の推進",              naiyou:"体制基準・研修内容の詳細追加\n除外基準の追加",                                                                                                                              taiou:"",         shurui:"答申", page:479 },
-  { id:17, code:"Ⅲ-2-①",    category:"リハビリ業務",      name:"リハ実績指数の見直し",                naiyou:"FIM歩行・トイレ動作の改善評価追加\n除外要件見直し（80歳以上削除、FIM基準変更、除外割合30%→20%）",                                                                          taiou:"",         shurui:"答申", page:489 },
-  { id:18, code:"Ⅲ-4-①",    category:"リハビリ算定",      name:"退院時リハ指導料の見直し",            naiyou:"対象患者を疾患別リハ算定患者に限定",                                                                                                                                        taiou:"",         shurui:"答申", page:550 },
-  { id:19, code:"Ⅲ-4-②",    category:"リハビリ算定",      name:"医療機関外リハの上限見直し",          naiyou:"医療機関外リハの算定上限を「一連の入院で3単位（特例6単位）」に変更",                                                                                                        taiou:"",         shurui:"答申", page:552 },
-  { id:20, code:"Ⅲ-4-③",    category:"リハビリ算定",      name:"疾患別リハ上限緩和対象の見直し",      naiyou:"運動器リハ算定者を対象から削除\n上限緩和基準に手術日・急性増悪日を追加",                                                                                                  taiou:"",         shurui:"答申", page:554 },
-  { id:21, code:"Ⅲ-4-④",    category:"リハビリ算定",      name:"訓練内容に応じた評価見直し",          naiyou:"離床を伴わない個別療法20分以上は減算（90%）\n1日2単位まで",                                                                                                               taiou:"",         shurui:"答申", page:555 },
-  { id:22, code:"Ⅲ-4-⑤",    category:"リハビリ算定",      name:"リハ総合実施計画評価料の見直し",      naiyou:"目標設定等支援・管理料（シート）廃止\n評価見直し",                                                                                                                          taiou:"",         shurui:"答申", page:558 },
-  { id:23, code:"Ⅲ-4-⑥",    category:"リハビリ算定",      name:"リンパ浮腫複合的治療料の見直し",      naiyou:"実施時間ごとの評価に見直し",                                                                                                                                               taiou:"該当なし", shurui:"答申", page:560 },
-  { id:24, code:"Ⅲ-4-1-①",  category:"リハビリ算定",      name:"早期・休日リハの推進",                naiyou:"早期リハ加算：入院3日以内60点、4日目以降25点\n休日リハ加算新設（30日目まで25点）",                                                                                        taiou:"",         shurui:"答申", page:561 },
-  { id:25, code:"Ⅲ-5-2-⑤",  category:"入院料",            name:"産科管理加算の新設",                  naiyou:"産後ケア等と連携した体制評価（病院250点、有床診50点）",                                                                                                                    taiou:"該当なし", shurui:"答申", page:596 },
+  // ── 答申項目 ──
+  { id:1,  code:"Ⅰ-2-1-①",   category:"賃上げ・処遇改善", name:"賃上げに向けた評価の見直し",
+    naiyou:"医療機関に勤務する看護職員、病院薬剤師、理学療法士等の賃金改善の評価（各ベースアップ評価料）の見直し",
+    taiou:"処遇改善手当として賃金改善を行なっている\n（減算の対象にはならない）", page:30 },
+
+  { id:2,  code:"Ⅰ-2-3-①",   category:"多職種連携", name:"多職種協働体制の評価新設",
+    naiyou:"看護・多職種協働加算（加算1：277点、加算2：255点）\n各医療職種が専門性に基づき業務を行う体制整備",
+    taiou:"該当なし\n急性期一般入院料４及び急性期病院Ｂ一般入院料のうち、急性期一般入院料１と同等の重症度、医療・看護必要度等を満たす病棟に関する内容", page:77 },
+
+  { id:3,  code:"Ⅰ-2-5-④",   category:"摂食嚥下", name:"摂食嚥下機能回復の推進",
+    naiyou:"摂食嚥下機能回復体制加算の専従要件緩和／対象患者要件拡大\n専従の常勤言語聴覚士だったのが、専任へと変更して要件が緩和\n🔶対象患者に対して月に1回以上「嚥下造影検査（VF）」または「嚥下内視鏡検査（VE）」を実施し、評価・見直しを行うことが必須要件\n🔶カンファレンスを週1回以上実施し、今後の支援計画を検討（摂食嚥下支援計画書の作成が必要）",
+    taiou:"対象患者が多くなく、かつVFの実施頻度と週1回以上のカンファレンスがハードルとなる\nなお、経腸栄養（経鼻や胃ろう）や中心静脈栄養から「経口摂取へ回復させた患者」の一定の実績も必要（様式43の6の2で届出）", page:104 },
+
+  { id:4,  code:"Ⅰ-2-5-⑤",   category:"リハビリ業務", name:"療法士の専門性を生かした指導推進",
+    naiyou:"間接業務20分＝1単位化／専従療法士の業務追加・兼任見直し／病棟外での退院支援業務を明確化／管理料併設時の兼任可能化",
+    taiou:"間接業務（カルテ作成や書類作成は含めない）の20分を1単位としてカウントするが、算定方法は要確認", page:107 },
+
+  { id:5,  code:"Ⅱ-1-1-⑨",   category:"入院料", name:"地域包括医療病棟の見直し",
+    naiyou:"入院料の見直し\nリハ・栄養・口腔連携加算の見直し\n平均在院日数・ADL低下割合等の基準見直し",
+    taiou:"該当なし", page:185 },
+
+  { id:6,  code:"Ⅱ-1-1-⑩",   category:"入院料", name:"回復期リハ病棟入院料等の見直し",
+    naiyou:"強化体制加算新設（80点/日）\n重症基準見直し・対象追加\n土日祝含む全日リハ提供体制\n退院前訪問指導料の出来高化\nFIM研修要件見直し",
+    taiou:"管理方法の見直しが必要\n退院前訪問指導料を出来高で算定できるため、本人同行の住宅訪問に行った際には算定する必要がある", page:189 },
+
+  { id:7,  code:"Ⅱ-1-1-⑪",   category:"入院料", name:"療養病棟入院基本料の見直し",
+    naiyou:"超重症児（者）・準超重症児（者）を医療区分3・2に追加",
+    taiou:"該当なし", page:199 },
+
+  { id:8,  code:"Ⅱ-1-1-⑫",   category:"入院料", name:"障害者施設等入院基本料の見直し",
+    naiyou:"廃用症候群患者を療養病棟に準じた評価へ（重度肢体不自由者を除く）",
+    taiou:"該当なし", page:206 },
+
+  { id:9,  code:"Ⅱ-2-1-①",   category:"在宅・退院支援", name:"協力医療機関のカンファレンス見直し",
+    naiyou:"協力対象施設との情報共有・カンファレンス頻度の見直し",
+    taiou:"該当なし", page:258 },
+
+  { id:10, code:"Ⅱ-2-1-②",   category:"在宅・退院支援", name:"包括期入院医療の後方支援評価",
+    naiyou:"包括期充実体制加算新設（80点/日）",
+    taiou:"該当なし", page:262 },
+
+  { id:11, code:"Ⅱ-2-2-①",   category:"在宅・退院支援", name:"入退院支援加算の見直し",
+    naiyou:"地域包括医療病棟・回復期リハ病棟・地域包括ケア病棟で算定新設\n検査・画像情報提供加算新設",
+    taiou:"該当なし\n入院3日もしくは7日以内に患者の状況把握を行ない、退院困難となる要因を判断する必要がある。専従の「入退院支援職員（看護師または社会福祉士）」を入退院支援部門に配置し、各病棟に専任の担当者を配置することがハードルとなっている。", page:267 },
+
+  { id:12, code:"Ⅱ-2-2-③",   category:"在宅・退院支援", name:"高次脳機能障害者の退院支援",
+    naiyou:"退院時に必要に応じ情報提供を要件化\n高次脳機能障害者支援センターや指定障害福祉サービス事業所等の情報を把握するとともに、高次脳機能障害患者の退院時に当該情報を説明し、必要に応じて対象機関に患者情報の提供を行うことを要件とする",
+    taiou:"高次脳機能障害患者が退院後、円滑に障害福祉サービス等を利用できるよう必要な体制が整備されている＝県内のサービス把握と、対応のフローなどの作成が必要になるか", page:276 },
+
+  { id:13, code:"Ⅱ-2-3-①",   category:"リハ栄養", name:"リハ・栄養・口腔の一体的取組推進",
+    naiyou:"連携体制加算の見直し\n加算2新設（150点・90点）\n地域包括ケア病棟でも算定可能",
+    taiou:"該当なし\n患者１人につきリハビリテーション・栄養管理・口腔管理に係る計画を作成した日から起算して14日を限度に算定できるが、専従療法士が必要で、かつ専従療法士は9単位までのリハビリしかできない", page:280 },
+
+  { id:14, code:"Ⅱ-2-3-③",   category:"多職種連携", name:"歯科医療機関との連携（医科）",
+    naiyou:"口腔管理連携加算 600点\n歯科医療機関との連携体制がある保険医療機関で、患者が入院中に歯科診療を受けた場合の評価を新設する",
+    taiou:"さいとう歯科クリニックと連携機関であることを書類で提出。要件となっている院内掲示とWEB上に掲示する掲示物は作成済。電子カルテのアップデートによりオーダーを出すことができれば算定ができる状況となっている（具体的な手順は要確認）。", page:291 },
+
+  { id:15, code:"Ⅱ-2-3-④",   category:"多職種連携", name:"歯科医療機関との連携（歯科）",
+    naiyou:"医科連携訪問加算 500点\n連携体制を構築している他の保険医療機関からの依頼に基づき、口腔状態に係る課題を抱える入院患者に対して、歯科訪問診療を行った場合の評価",
+    taiou:"さいとう歯科クリニック側が訪問歯科治療をした場合に算定", page:293 },
+
+  { id:16, code:"Ⅱ-5-1-③",   category:"在宅・退院支援", name:"退院直後の訪問栄養食事指導",
+    naiyou:"退院後訪問栄養食事指導料（１回につき）530点\n退院直後に、入院保険医療機関の管理栄養士が患家等を訪問し、患者又はその家族等退院後に患者の在宅療養支援に当たる者に対して、退院後の在宅における栄養管理や食生活に関する指導を行った場合の評価",
+    taiou:"", page:365 },
+
+  { id:17, code:"Ⅲ-1-①",     category:"在宅・退院支援", name:"療養・就労両立支援指導料の見直し",
+    naiyou:"【療養・就労両立支援指導料】初回 850点　２回目以降 500点\n対象疾患の定め廃止／算定期間を3か月→6か月へ延長\n当該患者と当該患者を雇用する事業者が共同して作成した勤務情報を記載した文書の内容を踏まえ、就労の状況を考慮して療養上の指導を行うとともに、当該患者の同意を得て、産業医・衛生管理者・保健師などに対して病状・治療計画・就労上の措置に関する意見等を提供した場合に、月１回に限り算定",
+    taiou:"", page:444 },
+
+  { id:18, code:"Ⅲ-1-⑭",     category:"入院料", name:"慢性心不全再入院予防の評価新設",
+    naiyou:"心不全再入院予防継続管理料新設（1000〜225点）",
+    taiou:"該当なし", page:480 },
+
+  { id:19, code:"Ⅲ-1-1-①",   category:"入院料", name:"身体的拘束最小化の推進",
+    naiyou:"体制基準・研修内容の詳細追加／除外基準の追加\n身体的拘束最小化の基準を充実させ、組織風土の重要性や研修内容に触れるとともに、実績や取組に関する要件を追加",
+    taiou:"身体的拘束最小化のために病院全体として取組を行っていること、原則として身体的拘束を行わない方針であること及び身体的拘束の実施状況についてWEBサイトに掲載しておく必要がある\n⇒指針はホームページに掲載している", page:491 },
+
+  { id:20, code:"Ⅲ-1-1-②",   category:"入院料", name:"認知症ケア加算の見直し",
+    naiyou:"認知症を有する患者へのアセスメントやケアの充実を図りながら、組織で統一した取組が図られ、身体的拘束の最小化を目指した適切なケアや支援が推進されるよう、評価を見直す",
+    taiou:"", page:499 },
+
+  { id:21, code:"Ⅲ-2-①",     category:"リハビリ業務", name:"リハ実績指数の見直し",
+    naiyou:"FIM歩行・トイレ動作の改善評価追加／除外要件見直し（80歳以上削除、FIM基準変更、除外割合30%→20%）\n🔶FIM運動項目のうち「歩行・車椅子」及び「トイレ動作」の得点について、入棟中又は入室中に５点以下から６点以上に上がった場合、分子のFIM運動項目利得に１点を加える\n🔶FIM基準変更として「FIM認知項目の得点が24点以下のもの」を「FIM認知項目の得点が14点以下のもの」に見直す\n🔶除外割合を30%から20%に引き下げる",
+    taiou:"電子カルテ・リハ支援システムのアップデートにあわせて管理。\nWEBへの掲示についても定期的に更新をしていく。", page:501 },
+
+  { id:22, code:"Ⅲ-3-2-⑥",   category:"在宅・退院支援", name:"外来栄養食事指導料の見直し",
+    naiyou:"情報通信機器等を用いた外来栄養食事指導料について、２回目以降に情報通信機器又は電話により追加的な指導を行った場合の区分を新設する",
+    taiou:"", page:553 },
+
+  { id:23, code:"Ⅲ-4-①",     category:"リハビリ算定", name:"退院時リハ指導料の見直し",
+    naiyou:"対象患者を疾患別リハ算定患者に限定",
+    taiou:"元々疾患別リハビリテーション料を算定している患者のみを対象に算定しており、影響なし", page:562 },
+
+  { id:24, code:"Ⅲ-4-②",     category:"リハビリ算定", name:"医療機関外リハの上限見直し",
+    naiyou:"医療機関外リハの算定上限を「一連の入院で3単位（特例6単位）」に変更",
+    taiou:"一般病棟のリハビリでは上限3単位、回復期病棟でのリハビリでは上限6単位の医療機関外リハが可能", page:564 },
+
+  { id:25, code:"Ⅲ-4-③",     category:"リハビリ算定", name:"疾患別リハ上限緩和対象の見直し",
+    naiyou:"運動器リハ算定者を対象から削除\n上限緩和基準に手術日・急性増悪日を追加",
+    taiou:"改めて回復期リハビリテーション病棟における6単位を超えた運動器リハビリ算定は不可", page:566 },
+
+  { id:26, code:"Ⅲ-4-④",     category:"リハビリ算定", name:"訓練内容に応じた評価見直し",
+    naiyou:"離床を伴わない個別療法20分以上は減算（90%）／1日2単位まで",
+    taiou:"疑義解釈にあるが、少しでも離床を試みた場合は減算対象にならず、基本的には該当しない\n記録の書き方は注意（ベッド上でストレッチのみ実施した場合はダメ）", page:567 },
+
+  { id:27, code:"Ⅲ-4-⑤",     category:"リハビリ算定", name:"リハ総合実施計画評価料の見直し",
+    naiyou:"【リハビリテーション総合計画評価料】\n※レセプトシステムで初回、2回目の判定は自動化となる見込み\nリハビリテーション総合計画評価料１\n　イ 初回の場合 300点　ロ ２回目以降の場合 240点\nリハビリテーション総合計画評価料２\n　イ 初回の場合 240点　ロ ２回目以降の場合 196点\n※目標設定等支援・管理料（シート）廃止",
+    taiou:"R8年度版 別紙様式21が使えるようになった\nこれまでの実施計画書も使用可能であるが、実施計画書と総合の内容が共通している書式であることや、目標設定等支援管理シートの内容が含まれるかたちとなったことから様式21を使用する方向。\n※疑義解釈にあるが、改定前までに総合計画評価料1もしくは2を算定していた場合、改定後はそれぞれ評価料1や2の2回目以降として算定する", page:570 },
+
+  { id:28, code:"Ⅲ-4-⑥",     category:"リハビリ算定", name:"リンパ浮腫複合的治療料の見直し",
+    naiyou:"実施時間ごとの評価に見直し",
+    taiou:"該当なし", page:572 },
+
+  { id:29, code:"Ⅲ-4-1-①",   category:"リハビリ算定", name:"早期・休日リハの推進",
+    naiyou:"早期リハ加算：入院3日以内60点、4日目以降25点／休日リハ加算新設（30日目まで25点）\n早期リハビリテーション加算の評価を見直し、入院した日から起算して３日目以内は増点し、４日目以降は減点する（加算可能な期間は入院した日から起算して14日目まで）\n土日祝のリハビリ実施を評価する観点から、休日リハビリテーション加算を新設する。",
+    taiou:"※レセプトシステムで自動判定される見込み\n休日のリハビリテーションに対して起算日から30日目までは25点が加算される", page:573 },
+
+  // ── 疑義解釈項目 ──
+  { id:30, code:"疑義1問27",   category:"疑義解釈", name:"FIM測定における研修受講の対象",
+    naiyou:"FIMの測定に関わる職員を対象としたFIMの測定に関する研修の対象職員として、FIMの測定を担当する看護職員も該当するとされているが回復期リハビリテーション病棟入院料２及び４も同様か\n⇒FIMの測定を担当する看護職員も研修の対象",
+    taiou:"", page:9 },
+
+  { id:31, code:"疑義1問28",   category:"疑義解釈", name:"重症患者の範囲及び重症患者割合の基準",
+    naiyou:"令和8年5月31日までに入棟又は入室した患者については、令和8年度診療報酬改定前の重症患者の範囲及び重症患者割合の基準を用いてよい。また、算出対象期間が令和8年5月と同年6月をまたぐ場合、新規入院患者のうち重症の患者である割合の基準については、令和8年度診療報酬改定後の基準を用いてよい。",
+    taiou:"", page:9 },
+
+  { id:32, code:"疑義1問29",   category:"疑義解釈", name:"高次脳機能障害者の退院支援（疑義）",
+    naiyou:"具体的にどのような体制を指すのか\n⇒医療機関において、地域の様々な事業所のうち高次脳機能障害の患者に適したものに関する情報の把握を行ったうえで、全ての高次脳機能障害の患者の退院時に、患者及び家族等に、当該情報を提供できる状態をいう",
+    taiou:"令和８年12月31日までは、速やかに情報提供ができるよう、情報の把握や整理を現に実施している場合も含む、とあるため準備していく", page:10 },
+
+  { id:33, code:"疑義1問39",   category:"疑義解釈", name:"休日リハビリテーション加算（経過措置）",
+    naiyou:"令和８年度診療報酬改定にて休日リハビリテーション加算が新設されたが、令和８年５月31日以前に入院し、同年６月１日以降も入院している患者に対して当該加算を算定する場合、起算日はどのように考えればよいか\n（答）休日リハビリテーション加算の起算日に相当する日付が令和8年5月31日以前であっても、当該日付を起算日と考え、6月1日以降、算定要件を満たす日に算定可能である",
+    taiou:"（答）休日リハビリテーション加算の起算日に相当する日付が令和8年5月31日以前であっても、当該日付を起算日と考え、6月1日以降、算定要件を満たす日に算定可能である", page:12 },
+
+  { id:34, code:"疑義1問40",   category:"疑義解釈", name:"廃用症候群リハビリテーション料（入院前安静）",
+    naiyou:"入院中の患者の場合、急性疾患等に伴う安静とは、入院後に行われる必要があり、入院後に一定の安静期間がなければ算定できないのか\n（答）廃用症候群リハビリテーションの対象患者の要件は「急性疾患等に伴う安静」であり、必ずしも入院後の安静期間を要するものではない。入院前に発症した疾患により入院までに生じた安静期間により、入院時に既にFIM等の要件を満たす廃用を認めた場合は、入院初日であっても廃用症候群リハビリテーション料を算定することができる。なお、早期リハビリテーション加算の算定可能期間は、廃用症候群リハビリテーション料の算定開始日によらず、入院日から14日間であることに留意すること。",
+    taiou:"", page:12 },
+
+  { id:35, code:"疑義1問41",   category:"疑義解釈", name:"リハ総合計画評価料（転医後の算定区分）",
+    naiyou:"他の保険医療機関でリハビリテーション総合計画評価料を算定した後に転医し、自院で同一の疾患についてリハビリテーション実施計画書を作成した場合は、「初回の場合」と「２回目以降の場合」のいずれの点数を算定すればよいか\n（答）当該保険医療機関において同一の疾患に対するリハビリテーションの実施にあたり初めてリハビリテーション総合計画評価料を算定する場合は、他の保険医療機関での算定の有無にかかわらず、「初回の場合」として算定する。",
+    taiou:"", page:13 },
+
+  { id:36, code:"疑義1問42",   category:"疑義解釈", name:"リハ総合計画評価料（起算日再設定後の算定区分）",
+    naiyou:"同一疾患についてリハビリテーションの起算日が再設定された後に、再度リハビリテーション総合計画評価料を算定する際は、「初回の場合」と「２回目以降の場合」のいずれの点数を算定すればよいか\n（答）同一の疾患別リハビリテーション料であっても、新たな疾患の発症や疾患の再発・急性増悪等によってリハビリテーション起算日が再設定され、改めてリハビリテーション総合実施計画書を作成・評価等を行った場合には、「初回の場合」を算定する。",
+    taiou:"", page:13 },
+
+  { id:37, code:"疑義1問43",   category:"疑義解釈", name:"リハ総合計画評価料（説明内容の診療録記載）",
+    naiyou:"リハビリテーション実施計画書又はリハビリテーション総合実施計画書の写しに説明日及び説明者の記載がない場合は診療録に記載することとされたが、リハビリテーション実施計画書又はリハビリテーション総合実施計画書を説明した後、説明の内容も診療録に記載する必要があるか。\n（答）不要。ただし、当該計画書の説明を行った際に、患者から当該計画に対する意見等、特に記載すべき事項がある場合は、診療録に記載すること",
+    taiou:"", page:13 },
+
+  { id:38, code:"疑義1問44",   category:"疑義解釈", name:"リハ総合計画評価料（改定前算定済みの場合）",
+    naiyou:"令和8年5月31日以前にリハビリテーション総合計画評価料１又は２を算定し、同年6月1日以降に再度同じ区分の算定要件を満たした場合は、「初回の場合」と「２回目以降の場合」のいずれの点数を算定すべきか。\n（答）令和8年5月31日以前にリハビリテーション総合計画評価料１又は２を算定していた場合には、同年６月以降は、リハビリテーション総合計画評価料１又は２の２回目以降として算定する。",
+    taiou:"", page:14 },
+
+  { id:39, code:"疑義1問46",   category:"疑義解釈", name:"特別食加算（嚥下調整食）対象患者の範囲",
+    naiyou:"特別食加算における嚥下調整食の対象となる「摂食機能又は嚥下機能が低下した患者」とは、内視鏡下嚥下機能評価や嚥下造影により嚥下機能の低下が確認できる者に限られるか。\n（答）内視鏡下嚥下機能評価や嚥下造影は必須ではないが、医師、看護師、言語聴覚士、管理栄養士等の多職種で評価を行う等により、適切な栄養量及び内容を有する嚥下調整食が必要であると医師が判断し、食事箋を発行した患者が対象である。",
+    taiou:"", page:14 },
+
+  { id:40, code:"疑義1問48",   category:"疑義解釈", name:"特別食加算（嚥下訓練食・経管栄養併用）",
+    naiyou:"嚥下訓練のためにゼリー等の嚥下訓練食品を提供した場合や、嚥下調整食と経管栄養を併用している場合も、特別食加算は算定できるか\n（答）患者に必要な栄養量が、１食の献立として常食で提供される場合と同等に確保できていない嚥下調整食は算定できない",
+    taiou:"", page:14 },
+
+  { id:41, code:"疑義2問23",   category:"疑義解釈", name:"入院診療計画書の電磁的保存",
+    naiyou:"入院診療計画書については、患者等に交付した文書の写しを診療録に添付することとされているが、電磁的方法により診療情報の記録及び保存を行っている場合には、診療録に患者等に交付したものと同じ内容の文書が電子媒体で保存されており、その文書を用いて説明を行った日及び説明者が記載されていることでよいか",
+    taiou:"その通り", page:8 },
+
+  { id:42, code:"疑義2問43",   category:"疑義解釈", name:"認知症ケア加算・身体的拘束最小化の研修兼用",
+    naiyou:"認知症ケア加算に係る研修に身体的拘束最小化の内容を兼ねるものとした場合には、当該研修で両方の基準をいずれも満たすものと考えてよいか\n（答）当該研修が通則の身体的拘束最小化の基準に規定する研修内容を含むものである場合には、満たすものとすることができる。ただし、身体的拘束最小化の基準については、「認知症患者に係わる職員」だけでなく、「入院患者に係わる職員」が対象であることに留意すること",
+    taiou:"", page:15 },
+
+  { id:43, code:"疑義2問46",   category:"疑義解釈", name:"リハビリテーション実績指数（FIM歩行・トイレ動作）",
+    naiyou:"「歩行・車椅子」及び「トイレ動作」の得点が５点以下から６点以上に上がった場合、FIM運動項目利得に１点を加えることとされているが、２項目のいずれも該当する必要があるのか、どちらか１項目が該当する場合でも１点を加えるのか\n（答）それぞれの項目が「入棟時に５点以下、かつ、退棟時に６点以上だった場合」にそれぞれ１点を加え、どちらか１項目の得点のみが該当する場合であっても、退棟時のFIM運動項目の得点から入棟時の得点を控除したものに１点を加える",
+    taiou:"", page:15 },
+
+  { id:44, code:"疑義2問47",   category:"疑義解釈", name:"重症患者の対象（高次脳機能障害の範囲）",
+    naiyou:"高次脳機能障害と診断された患者には、標準的算定日数が180日となる対象として示されている高次脳機能障害を伴った重症脳血管障害のみでなく、高次脳機能障害を伴った頭部外傷、脳腫瘍、脳炎、急性脳症も含まれるか\n（答）含まれる",
+    taiou:"", page:16 },
+
+  { id:45, code:"疑義2問48",   category:"疑義解釈", name:"実績指数の算出方法・除外対象（令和8年7月以降）",
+    naiyou:"令和８年７月以降にリハビリテーション実績指数を求めるに当たって、算出方法や除外対象患者をどのように考えればよいか\n令和８年５月31日までに入棟又は入室した患者の入棟又は入室月においては、令和８年度診療報酬改定前の基準を用いてよい\n※その他は資料参照",
+    taiou:"", page:16 },
+
+  { id:46, code:"疑義2問51",   category:"疑義解釈", name:"回復期リハ強化体制加算（退院前訪問指導の割合）",
+    naiyou:"回復期リハビリテーション強化体制加算の施設基準において、退院前訪問指導の実施割合の計算対象となる「直近６か月間に自宅へ退院した患者」について、「自宅」とは患者の自宅のみを指すのか",
+    taiou:"該当なし\n回復期リハビリテーション病棟入院料1のみ加算対象", page:17 },
+
+  { id:47, code:"疑義2問61",   category:"疑義解釈", name:"退院後訪問栄養食事指導料（同日算定）",
+    naiyou:"訪問看護ステーションの看護師に同行して患家等を訪問し、栄養管理に係る指導等を行った場合は、退院後訪問指導料又は在宅患者訪問看護・指導料等と同日に算定できるか\n（答）各指導料に規定する指導等の時間が重複しない場合は、算定できる",
+    taiou:"", page:20 },
+
+  { id:48, code:"疑義2問67",   category:"疑義解釈", name:"疾患別リハ（ポジショニングのみ実施の場合）",
+    naiyou:"ベッド上から移動せずにポジショニング又は拘縮の予防等を主たる目的とした他動的な訓練のみを行う入院中の患者については「特定の患者」として取り扱うこととなったが、１単位の中で一部にそのような訓練が含まれるが、それ以外の訓練が適切に行われる場合は「特定の患者」に該当しないと考えてよいか\n（答）そのとおり",
+    taiou:"", page:21 },
+
+  { id:49, code:"疑義2問70",   category:"疑義解釈", name:"早期リハビリテーション加算（起算日・経過措置）",
+    naiyou:"早期リハビリテーション加算の起算日の要件及び算定期間が変更となったが、令和８年５月31日以前に入院した患者の起算日及び算定可能日数については、具体的にどのように考えればよいか\n※資料参照",
+    taiou:"", page:23 },
+
+  { id:50, code:"疑義2問71",   category:"疑義解釈", name:"リハビリテーション実施計画書（情報通信機器による説明）",
+    naiyou:"医師の指示を受けた理学療法士等が計画書を説明する場合にも情報通信機器等を用いてよいか\n（答）よい",
+    taiou:"", page:24 },
+
+  { id:51, code:"疑義2問73",   category:"疑義解釈", name:"リハビリテーション実施計画書（医師以外による説明の指示）",
+    naiyou:"回復期リハビリテーション病棟以外では「医師の指示を受けた看護師、理学療法士、作業療法士若しくは言語聴覚士」が実施することが可能となったが、医師の指示はどのように受ければよいか。医師の指示について診療録への記載が必要か\n（答）リハビリテーション実施計画書（総合実施計画書）を作成した医師が他の職種による説明が可能と判断した症例については、当該医師が文書又は口頭で、計画書の内容を医師以外が行ってよい旨の指示を行うこと。なお、当該指示について必ずしも診療録への記載は要しない。",
+    taiou:"", page:24 },
+
+  { id:52, code:"疑義2問143",  category:"疑義解釈", name:"特別食加算（嚥下調整食）施設基準の研修",
+    naiyou:"特別食加算（嚥下調整食）の施設基準の責任者要件に係る研修とは、具体的にどのようなものがあるか\n（答）現時点では、日本摂食嚥下リハビリテーション学会及び日本栄養士会が共同して認定している「摂食嚥下リハビリテーション栄養専門管理栄養士」に係る研修が該当する。",
+    taiou:"", page:40 },
+
+  { id:53, code:"疑義5問16",   category:"疑義解釈", name:"リハビリテーション実施計画書等の電磁的保存",
+    naiyou:"署名が不要とされている他の書類についても、電磁的方法による保存で同様に扱ってよいか\n（答）そのとおり",
+    taiou:"", page:6 },
+
+  { id:54, code:"疑義6問14",   category:"疑義解釈", name:"退院前訪問指導料（訪問中のリハビリ同日算定）",
+    naiyou:"退院前訪問指導料について、患家の訪問中に退院後の在宅での療養上必要な指導を行った時間とは別の時間に疾患別リハビリテーションを実施した場合、退院前訪問指導料とは別に疾患別リハビリテーション料を算定することは可能か\n（答）算定可能。ただし、医療機関外で実施できる疾患別リハビリテーション料の算定上限単位数を超えないこと",
+    taiou:"", page:5 },
+
+  { id:55, code:"疑義6問16",   category:"疑義解釈", name:"早期リハビリテーション加算（疾患別起算日切替時の扱い）",
+    naiyou:"令和８年度診療報酬改定において、早期リハビリテーション加算の起算日が入院日となったが、異なる疾患の発症又は急性増悪等を契機として疾患別リハビリテーションの起算日が切り替わった場合、早期リハビリテーション加算の起算日は変更されるか\n（答）同一医療機関に入院を継続している場合は、疾患別リハビリテーションの起算日が切り替わった場合であっても早期リハビリテーション加算の起算日は当初の入院日から変更されない。疾患別リハビリテーションの起算日の切り替えの契機となった新たな疾患の発症等のために、入院中の患者が転院した場合又は退院していた患者が再入院した場合は、転院日又は再入院日を早期リハビリテーション加算の起算日とする",
+    taiou:"", page:6 },
 ];
 
-// 各項目に表示カテゴリリストを付与
-const DATA = RAW_DATA.map(d => ({ ...d, categories: getCategories(d) }));
+const DATA = RAW_DATA.map(d => {
+  const shurui = getShuruiFromCode(d.code);
+  const cats = getCategories(d);
+  // 疑義コードの項目は疑義解釈カテゴリも付与
+  if (/^疑義/.test(d.code) && !cats.includes("疑義解釈")) cats.unshift("疑義解釈");
+  return { ...d, shurui, categories: cats };
+});
 
 let activeCategory = "すべて";
 let openIds = new Set();
 
 function buildUrl(shurui, page) {
   if (!shurui || !page) return null;
-  const base = PDF_URLS[shurui] || PDF_URLS["答申"];
-  return base + "#page=" + page;
+  return (PDF_URLS[shurui] || PDF_URLS["答申"]) + "#page=" + page;
 }
 
 function getShuruiLabel(shurui) {
-  if (!shurui) return "";
   if (shurui === "答申") return "答申";
   return "疑義解釈その" + shurui.replace("疑義","");
 }
@@ -225,51 +426,41 @@ function render() {
   const kw = document.getElementById("searchInput").value.trim();
   const filtered = DATA.filter(d => {
     const catMatch = activeCategory === "すべて" || d.categories.includes(activeCategory);
-    const kwMatch = !kw || d.name.includes(kw) || d.naiyou.includes(kw) || d.taiou.includes(kw) || d.code.includes(kw) || d.category.includes(kw);
+    const kwMatch = !kw || [d.name, d.naiyou, d.taiou, d.code, d.category].some(s => s && s.includes(kw));
     return catMatch && kwMatch;
   });
 
   document.getElementById("countLabel").textContent = filtered.length + " 件表示中";
-
   const list = document.getElementById("list");
-  if (filtered.length === 0) {
-    list.innerHTML = '<div class="empty">該当する項目がありません</div>';
-    return;
-  }
+  if (!filtered.length) { list.innerHTML = '<div class="empty">該当する項目がありません</div>'; return; }
 
-  const svgChevron = `<svg class="chevron OPEN_CLASS" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`;
+  const svgChevron = open => `<svg class="chevron${open?' open':''}" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`;
   const svgLink = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
 
   list.innerHTML = filtered.map(d => {
     const isOpen = openIds.has(d.id);
+    const gaito = isGaitoNashi(d.taiou);
     const url = buildUrl(d.shurui, d.page);
-    const shuruiLabel = getShuruiLabel(d.shurui);
-    const chevron = svgChevron.replace("OPEN_CLASS", isOpen ? "open" : "");
-    const summaryText = d.naiyou.replace(/\n/g, "／").slice(0, 42) + (d.naiyou.length > 42 ? "…" : "");
+    const summaryText = (d.naiyou||"").replace(/\n/g,"／").slice(0,42) + ((d.naiyou||"").length>42?"…":"");
 
-    let taiouHtml;
-    if (d.taiou === "該当なし") {
-      taiouHtml = `<div class="taiou-gaito">当院には該当しない項目です</div>`;
-    } else if (d.taiou) {
-      taiouHtml = `<div class="taiou-box">${d.taiou}</div>`;
-    } else {
-      taiouHtml = `<div class="taiou-empty">対応内容を確認中です</div>`;
-    }
+    const taiouHtml = gaito
+      ? `<div class="taiou-gaito">${d.taiou}</div>`
+      : d.taiou
+        ? `<div class="taiou-box">${d.taiou}</div>`
+        : `<div class="taiou-empty">対応内容を確認中です</div>`;
 
-    const refHtml = url
-      ? `<a class="ref-link" href="${url}" target="_blank">${svgLink}${shuruiLabel} ${d.page}ページを開く</a>`
-      : "";
+    const refHtml = url ? `<a class="ref-link" href="${url}" target="_blank">${svgLink}${getShuruiLabel(d.shurui)} ${d.page}ページを開く</a>` : "";
 
-    return `<div class="item">
+    return `<div class="item${gaito?' gaito-nashi':''}">
       <div class="item-header" onclick="toggle(${d.id})">
         <span class="item-code">${d.code}</span>
         <div class="item-title-wrap">
           <div class="item-name">${d.name}</div>
-          ${!isOpen ? `<div class="item-summary">${summaryText}</div>` : ""}
+          ${!isOpen?`<div class="item-summary">${summaryText}</div>`:""}
         </div>
-        ${chevron}
+        ${svgChevron(isOpen)}
       </div>
-      <div class="item-body ${isOpen ? 'open' : ''}">
+      <div class="item-body${isOpen?' open':''}">
         <div class="section-label">改定内容</div>
         <div class="section-content">${d.naiyou}</div>
         <div class="section-label" style="margin-top:14px">当院の対応</div>
@@ -281,22 +472,19 @@ function render() {
 }
 
 function toggle(id) {
-  if (openIds.has(id)) openIds.delete(id); else openIds.add(id);
+  openIds.has(id) ? openIds.delete(id) : openIds.add(id);
   render();
 }
 
 function setCategory(c) {
   activeCategory = c;
-  document.querySelectorAll(".filter-btn").forEach(b => {
-    b.classList.toggle("active", b.dataset.cat === c);
-  });
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.toggle("active", b.dataset.cat===c));
   render();
 }
 
 function initFilters() {
-  const bar = document.getElementById("filterBar");
-  bar.innerHTML = CATEGORY_ORDER.map(c =>
-    `<button class="filter-btn ${c === activeCategory ? 'active' : ''}" data-cat="${c}" onclick="setCategory('${c}')">${c}</button>`
+  document.getElementById("filterBar").innerHTML = CATEGORY_ORDER.map(c =>
+    `<button class="filter-btn${c===activeCategory?' active':''}" data-cat="${c}" onclick="setCategory('${c}')">${c}</button>`
   ).join("");
 }
 
